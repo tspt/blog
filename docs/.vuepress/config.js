@@ -38,6 +38,7 @@ module.exports = {
         ['', '概述'],
         ['design', '设计模式'],
         ['es6', 'ES6'],
+        ['structure', '数据结构'],
         ['typescript', 'TS'],
         ['vue', 'Vue'],
         ['wx', '小程序'],
