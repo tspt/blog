@@ -1,11 +1,9 @@
 module.exports = {
-  title: 'Sth. I Like',
-  description: 'Sth. I Like',
-  base: '/',
-  port: '3000',
-  head: [
-    ['link', { rel: 'icon', href: '/logo.png' }]
-  ],
+  title: "Sth. I Like",
+  description: "Sth. I Like",
+  base: "/",
+  port: "3000",
+  head: [["link", { rel: "icon", href: "/logo.png" }]],
   themeConfig: {
     nav: [
       // {C
@@ -13,68 +11,74 @@ module.exports = {
       //   link: '',
       // },
       {
-        text: 'Learn',
+        text: "Learn",
         items: [
-          {text: 'JS', link: '/learn/js/'},
-          {text: 'CSS', link: '/learn/css/'},
-          {text: 'Tool', link: '/learn/tool/'},
-        ]
-      }
+          { text: "CSS", link: "/learn/css/" },
+          { text: "Enhance", link: "/learn/enhance/" },
+          { text: "JS", link: "/learn/js/" },
+          { text: "Tool", link: "/learn/tool/" },
+        ],
+      },
     ],
     // 搜索
     search: false,
     // searchMaxSuggestions: 10,
     // logo
-    logo: '',
+    logo: "",
     // 侧边栏
     // sidebarDepth: 2,
     sidebar: {
-      '/learn/css/': [
-        ['', '概述'],
-        ['less', 'Less'],
-        ['sass', 'Sass']
+      "/learn/css/": [
+        ["", "概述"],
+        ["less", "Less"],
+        ["sass", "Sass"],
       ],
-      '/learn/js/': [
-        ['', '概述'],
-        ['design', '设计模式'],
-        ['es6', 'ES6'],
-        ['structure', '数据结构'],
-        ['typescript', 'TS'],
-        ['vue', 'Vue'],
-        ['wx', '小程序'],
+      "/learn/enhance/": [
+        ["", "概述"],
+        ["design", "设计模式"],
+        ["es6", "ES6"],
+        ["structure", "数据结构"],
+        ["typescript", "TS"],
       ],
-      '/learn/tool/': [
-        ['', '概述'],
-        ['chrometool', 'ChromeTool'],
-        ['git', 'Git'],
-        ['gulp', 'Gulp'],
-        ['webpack', 'Webpack']
+      "/learn/js/": [
+        ["", "概述"],
+        ["vue2", "Vue2"],
+        ["vue3", "Vue3"],
+        ["axios", "Axios"],
+        ["wx", "小程序"],
+      ],
+      "/learn/tool/": [
+        ["", "概述"],
+        ["chrometool", "ChromeTool"],
+        ["git", "Git"],
+        ["gulp", "Gulp"],
+        ["webpack", "Webpack"],
       ],
     },
-    lastUpdated: 'Last Updated',
+    lastUpdated: "Last Updated",
     prevLinks: true,
-    nextLinks: true
+    nextLinks: true,
   },
   // 页面滚动
   smoothScroll: true,
   markdown: {
     includeLevel: [2, 3],
     // extractHeaders: [ 'h3', 'h4' ],
-    lineNumbers: true
+    lineNumbers: true,
   },
   plugins: [
     [
-      '@vuepress/blog',
+      "@vuepress/blog",
       {
         directories: [
           {
-            id: 'js',
-            dirname: 'js',
-            path: '/'
-          }
-        ]
-      }
+            id: "js",
+            dirname: "js",
+            path: "/",
+          },
+        ],
+      },
     ],
-    ['@vuepress/back-to-top']
-  ]
-}
+    ["@vuepress/back-to-top"],
+  ],
+};

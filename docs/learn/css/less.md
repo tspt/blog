@@ -7,11 +7,11 @@ meta:
     content: css,less
 ---
 
-# Less
+## Less
 
-## 变量
+### 变量
 
-```less
+```
 // 数值变量
 @midgray: #666;
 // 属性变量
@@ -45,9 +45,9 @@ meta:
 }
 ```
 
-## 选择器
+### 选择器
 
-```less
+```
 .el-btn {
   background: #666;
 
@@ -65,18 +65,16 @@ meta:
 }
 ```
 
-## extend
+### extend
 
 继承必须放在选择器最后
 
-```less
-.basestyle {
-}
+```
+.basestyle {}
 .el-btn {
-  &:extend(".basestyle");
+  &:extend('.basestyle');
 }
-.el-btn:extend(".basestyle") {
-}
+.el-btn:extend('.basestyle') {}
 
 // 需要完全匹配（除了属性选择器带引号的）
 // 不能使用变量的选择器
@@ -84,15 +82,15 @@ meta:
 // 相对于mixins，extend使生成的css更小，mixins只能与简单的选择器一起使用
 ```
 
-## merge
+### merge
 
-```less
+```
 // +  逗号分隔
 .boxShadow () {
-  box-shadow+: 0 0 2px #999;
+	box-shadow+: 0 0 2px #999;
 }
 .el-btn {
-  .boxShadow();
+	.boxShadow();
   box-shadow+: 0 0 1px #666;
 }
 // output
@@ -100,13 +98,14 @@ meta:
   box-shadow: 0 0 2px #999, 0 0 1px #666;
 }
 
+
 // +_  空格分隔
 .translate () {
-  transform+_: translate(10px);
+	transform+_: translate(10px);
 }
 .el-btn {
-  .translate();
-  transform+_: rotate(10deg);
+	.translate();
+	transform+_: rotate(10deg);
 }
 // output
 .el-btn {
@@ -114,11 +113,11 @@ meta:
 }
 ```
 
-## mixins
+### mixins
 
 未来版本不推荐缺省括号
 
-```less
+```
 // 没输出的mixin
 .getStyle () {
   color: #ccc;
@@ -128,6 +127,7 @@ meta:
   .getStyle();
 }
 
+
 // !important会适用于所有属性
 .getStyle () {
   color: #ccc;
@@ -136,6 +136,7 @@ meta:
 .el-btn {
   .getStyle() !important;
 }
+
 
 // Named param
 .getStyle (@color: #ccc; @background: #fff; @bColor: #999) {
@@ -147,6 +148,7 @@ meta:
   .getStyle(#999, @background: #f0f0f0);
 }
 
+
 // arguments
 .box-shadow (@x: 0; @y: 0; @blur: 1px; @color: #333) {
   box-shadow: @arguments;
@@ -155,28 +157,25 @@ meta:
   .box-shadow(1px; 7px);
 }
 
+
 // reset
-.getBackground (...) {
-}
-.getBackground (@color: #999; ...) {
-}
-.getBackground (@color: #999; @reset...) {
-}
-.getBackground (@color: #999; @reset...) {
-}
+.getBackground (...) {}
+.getBackground (@color: #999; ...) {}
+.getBackground (@color: #999; @reset...) {}
+.getBackground (@color: #999; @reset...) {}
 ```
 
-## import
+### import
 
-```less
-@import (reference) "filename";
+```
+@import (reference) 'filename'    // 引用但是不输出
 ```
 
-## mixins guards
+### mixins guards
 
 when 里面可以用的比较运算符：=, >=, >, <=, <
 
-```less
+```
 .getColor (@color) when (lightness(@color) > 50%) {
   background: #fff;
 }
@@ -194,7 +193,7 @@ when 里面可以用的比较运算符：=, >=, >, <=, <
 
 逻辑运算符：and，逗号，not
 
-```less
+```
 // 并且
 .getHeight (@size) when (@size > 30) and (@size < 60) {
   width: @size;
@@ -220,7 +219,7 @@ when 里面可以用的比较运算符：=, >=, >, <=, <
 
 default()为默认匹配，当其余条件不满足时匹配
 
-```less
+```
 .getShadow (@size) when (isnumber(@size)) and (@size < 10) {
   box-shadow: 0 0 @size #ccc;
 }
@@ -232,9 +231,9 @@ default()为默认匹配，当其余条件不满足时匹配
 }
 ```
 
-## css guards
+### css guards
 
-```less
+```
 // v1.5.0
 @size: 20px;
 button when (isnumber(@size)) and (@size > 10) {
@@ -249,9 +248,9 @@ button when (isnumber(@size)) and (@size > 10) {
 }
 ```
 
-## loops
+### loops
 
-```less
+```
 .setCol (@n, @i: i) when (@i =< @n) {
   .el-col-@{i} {
     width: 100% * @i / 12;

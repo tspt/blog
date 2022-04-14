@@ -7,9 +7,7 @@ meta:
     content: tool,git
 ---
 
-# Git
-
-## branch
+### branch
 
 ```
 // 创建分支
@@ -25,14 +23,14 @@ git checkout -b myBranch
 git branch -d myBranch
 ```
 
-## merge
+### merge
 
 ```
 // 合并目标分支到该分支（HEAD所指向分支）
 git merge myBranch
 ```
 
-## add
+### add
 
 ```
 git add .

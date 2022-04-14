@@ -7,58 +7,86 @@ meta:
     content: tool,webpack
 ---
 
-# Webpack
-
-```js
+```
 module.exports = {
   // Entry
-  entry: {},
+  entry: {
+
+  },
 
   // Output
   output: {
-    filename: "",
+    filename: '',
   },
 
   // Module
   module: {
     noParse: /jquery|lodash/,
-    rules: [{}],
+    rules: [
+      {
+
+      }
+    ]
   },
 
   // Plugins
-  plugins: [],
+  plugins: [
+
+  ],
 
   // Mode
   // value: development production
-  mode: "development",
+  mode: 'development',
 
   // Target
   // value: web node
-  target: "web",
+  target: 'web',
+
 
   // 别名
-  alias: {},
+  alias: {
+
+  },
 
   // 扩展
-  extensions: [".js", ".json"],
+  extensions: ['.js', '.json'],
 
   // devServer
   devServer: {
     open: true,
-    openPage: "",
-    host: "",
-    post: "",
+    openPage: '',
+    host: '',
+    post: '',
     lazy: true,
-    filename: "bundle.js",
+    filename: 'bundle.js',
     overlay: {
       warnings: true,
-      errors: true,
+      errors: true
     },
-    pubilcPath: "",
-    index: "",
+    pubilcPath: '',
+    index: '',
     proxy: {
-      "/api": "http://localhost:8080/",
+      '/api': 'http://localhost:8080/',
     },
-  },
-};
+  }
+
+}
+```
+
+### babel
+
+使用 babel-plugin-transform-runtime 需要将 babel-runtime 当做依赖
+
+```js
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "useBuiltIns": "usage", // 按需加载
+        "debug": true
+      }
+    ]
+  ]
+}
 ```

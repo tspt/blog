@@ -7,9 +7,9 @@ meta:
     content: css,sass
 ---
 
-# Sass
+## Sass
 
-## 环境配置
+### 1. Sass 环境配置
 
 - 下载 ruby 安装包，查看 ruby 安装成功：ruby -v
 - 移除 gem 源：gem sources --remove https://rubygems.org/
@@ -19,11 +19,11 @@ meta:
 - 更新 sass：gem update sass
 - 查看 sass 安装成功：sass -v
 
-## 运行
+### 2. Sass 运行
 
-### 命令行编译
+#### 2.1 命令行编译
 
-```powershell
+```
 //单文件
 sass index.scss index.scss
 //监听单文件
@@ -32,7 +32,7 @@ sass --watch index.scss:index.scss
 sass --watch src/assets/sass:src/assets/css
 ```
 
-### 命令行编译配置选项
+#### 2.2 命令行编译配置选项
 
 ```
 //解析后排版格式
@@ -41,11 +41,11 @@ sass --watch src/assets/sass:src/assets/css
 --sourcemap
 ```
 
-## 写法
+### 3. 写法
 
-### 嵌套
+#### 3.1 嵌套
 
-```sass
+```css
 .side {
   background: #999;
   &:hover {
@@ -57,9 +57,9 @@ sass --watch src/assets/sass:src/assets/css
 }
 ```
 
-**属性嵌套**
+#### 3.1.1 属性嵌套
 
-```sass
+```css
 .nav {
   font: {
     size: 16px;
@@ -69,14 +69,14 @@ sass --watch src/assets/sass:src/assets/css
 }
 ```
 
-### 注释
+#### 3.2 注释
 
 多行注释`/**/`会被编译到 css 文件中，单行注释`//`不会  
 compressed 模式下，多行注释第一个字符为!时，会保留该注释
 
-### 变量
+#### 3.3 变量
 
-```sass
+```css
 $basecolor: #363636;
 //局部变量转换为全局变量
 .nav {
@@ -88,7 +88,7 @@ $basecolor: #363636;
 }
 ```
 
-### 数据类型
+#### 3.4 数据类型
 
 - 数字
 - 字符串
@@ -97,7 +97,7 @@ $basecolor: #363636;
 - 数组，空格或逗号隔开
 - map
 
-### 运算符
+#### 3.5 运算符
 
 /：
 
@@ -105,15 +105,15 @@ $basecolor: #363636;
 - 值被圆括号包裹
 - 值是算术表达式的一部分
 
-+: null 被当作空字符串
++： null 被当作空字符串
 
 #{}: 使用变量，同时可以避免运算符
 
 !default：给变量赋值，如果值为 null 或未赋值过
 
-### @-Rules 与指令
+#### 3.6 @-Rules 与指令
 
-**@import**
+#### 3.6.1 @import
 
 @import "_index.scss"加入`_`不会编译该文件  
 @import 四类普通 css 语句
@@ -123,11 +123,11 @@ $basecolor: #363636;
 - url()
 - media queries
 
-**@media**
+#### 3.6.2 @media
 
 @media 嵌套在 css 规则内，会编译到最外层，包含嵌套的父选择器
 
-```sass
+```css
 .nav {
   height: 66px;
   @media screen and (max-width: 320px) {
@@ -138,7 +138,7 @@ $basecolor: #363636;
 
 @media 互相嵌套，编译时会自动添加 and
 
-```sass
+```css
 @media screen and (max-width: 320px) {
   .nav {
     @media (orientation: langscape) {
@@ -148,12 +148,12 @@ $basecolor: #363636;
 }
 ```
 
-**@extend**
+#### 3.6.3 @extend
 
 @extend 继承所有包含该选择器的样式  
 @extend 多重延伸
 
-```sass
+```css
 .rectangle {
   width: 52px;
   height: 26px;
@@ -171,7 +171,7 @@ $basecolor: #363636;
 
 @extend 继续延伸
 
-```sass
+```css
 .square {
   @extend .rectangle;
 }
@@ -182,7 +182,7 @@ $basecolor: #363636;
 
 @extend 选择器列
 
-```sass
+```css
 .rectangle {
   width: 52px;
   height: 26px;
@@ -198,7 +198,7 @@ $basecolor: #363636;
 
 占位符选择器%，忽略不用的样式，并且自身不会被编译
 
-```sass
+```css
 .rectangle {
   & span%active {
     color: #999;
@@ -211,7 +211,7 @@ $basecolor: #363636;
 
 !optional 声明不生成新选择器，同时可以避免报错
 
-```sass
+```css
 div.rectangle {
   width: 52px;
   height: 26px;
@@ -223,20 +223,22 @@ a.square {
 
 @media 中，@extend 必须延伸相同指令层中的选择器
 
-**@at-root**
+#### 3.7 @at-root
 
-`@at-root`
+@at-root
 
-```sass
+```css
 .rectangle {
-  & span {}
-  @at-root p {}
+  & span {
+  }
+  @at-root p {
+  }
 }
 ```
 
-`@at-root (without: ...)`
+@at-root (without: ...)
 
-```sass
+```css
 @media screen and (max-width: 320px) {
   .nav {
     height: 36px;
@@ -247,9 +249,9 @@ a.square {
 }
 ```
 
-`@at-root (with: ...)`
+@at-root (with: ...)
 
-```sass
+```css
 @media screen and (max-width: 320px) {
   .nav {
     height: 36px;
@@ -260,11 +262,11 @@ a.square {
 }
 ```
 
-### 控制指令
+#### 3.8 控制指令
 
-`@if / @else if / @else`
+#### 3.8.1 if() @if
 
-```sass
+```css
 $basecolor: #999;
 .nav {
   //返回一个值
@@ -279,9 +281,9 @@ $basecolor: #999;
 }
 ```
 
-`@for`
+#### 3.8.2 @for
 
-```sass
+```css
 //to范围 [n, m)
 @for $i from 6 to 9 {
   .item-#{$i} {
@@ -296,32 +298,32 @@ $basecolor: #999;
 }
 ```
 
-`@each`
+#### 3.8.3 @each
 
-```sass
+```css
 //@each $var in <list>
 @each $fruit in apple, pear, banana {
   .#{$fruit}-icon {
-    background-image: url('/images/#{$fruit}.png');
+    background-image: url("/images/#{$fruit}.png");
   }
 }
 @each $fruit, $color in (apple, red), (pear, green), (banana, yellow) {
   .#{$fruit}-icon {
-    background-image: url('/images/#{$fruit}.png');
+    background-image: url("/images/#{$fruit}.png");
     background-color: $color;
   }
 }
 @each $fruit, $color in (apple: red, pear: green, banana: yellow) {
-    .#{$fruit}-icon {
-    background-image: url('/images/#{$fruit}.png');
+  .#{$fruit}-icon {
+    background-image: url("/images/#{$fruit}.png");
     background-color: $color;
   }
 }
 ```
 
-`@while`
+#### 3.8.4 @while
 
-```sass
+```css
 $i: 6;
 @while $i > 0 {
   .item-#{$i} {
@@ -331,11 +333,11 @@ $i: 6;
 }
 ```
 
-### 混合指令
+#### 3.9 混合指令
 
-`@mixin / @include`
+#### 3.9.1 @mixin @include
 
-```sass
+```css
 //定义
 @mixin inner-wrap {
   font: {
@@ -393,9 +395,9 @@ $colors: #666, #999, #c6c6c6;
 }
 ```
 
-`@content`
+#### 3.9.2 @content
 
-```sass
+```css
 //向混合样式导入内容
 @mixin cont-box {
   box-sizing: border-box;
@@ -408,16 +410,16 @@ $colors: #666, #999, #c6c6c6;
 }
 ```
 
-**书写方便**
+#### 3.9.3 书写方便
 
 > @mixin 简写 =  
-> @include 简写 +
+>  @include 简写 +
 
-### 函数指令
+#### 3.10 函数指令
 
-`@function / @return`
+@function @return
 
-```sass
+```css
 @function set-size($n, $m) {
   @return $n * $m * 6;
 }
