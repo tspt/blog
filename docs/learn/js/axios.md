@@ -7,6 +7,8 @@ meta:
     content: js,vue
 ---
 
+## 基本使用
+
 ```js
 // GET
 axios
@@ -49,7 +51,7 @@ axios
   });
 ```
 
-### API 方法
+## API 方法
 
 `axios(config)`  
 `axios(url[, config])`
@@ -77,7 +79,7 @@ instance.put(url[, data[, config]])
 instance.patch(url[, data[, config]])
 ```
 
-### config 配置
+## config 配置
 
 ```js
 {
@@ -215,7 +217,7 @@ instance.patch(url[, data[, config]])
 }
 ```
 
-### response 对象
+## response 对象
 
 ```js
 {
@@ -241,7 +243,9 @@ instance.patch(url[, data[, config]])
 }
 ```
 
-### 全局设置默认值
+## 设置默认值
+
+### 全局
 
 ```js
 axios.defaults.baseURL = "https://api.example.com";
@@ -249,7 +253,7 @@ axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
 axios.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
 ```
 
-### 实例设置默认值
+### 实例
 
 ```js
 const instance = axios.create({
@@ -259,7 +263,7 @@ const instance = axios.create({
 instance.defaults.headers.common["Authorization"] = AUTH_TOKEN;
 ```
 
-### 拦截器
+## 拦截器
 
 ```js
 // 添加请求拦截器
@@ -294,7 +298,7 @@ axios.interceptors.request.eject(myInterceptor);
 instance.interceptors.request.use(function () {});
 ```
 
-### 取消请求
+## 取消请求
 
 ```js
 /* 同时取消多个请求 */

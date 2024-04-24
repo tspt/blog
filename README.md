@@ -5,3 +5,7 @@
 # 打包
 
 `npm run docs:build`
+
+# 发布
+
+`npm run deploy`

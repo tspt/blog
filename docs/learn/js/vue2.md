@@ -7,9 +7,7 @@ meta:
     content: js,vue
 ---
 
-# Vue2
-
-## 初始化 vue 实例
+## 初始化实例
 
 ```js
 // main.js

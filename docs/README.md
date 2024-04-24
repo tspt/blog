@@ -6,15 +6,14 @@ tagline: 它确实是一个杂记
 actionText: Let's go →
 actionLink: /learn/css/
 features:
-- title: Ok?
-  details: 天啦噜
-- title: Continute...
-  details: Maybe you don't like
-- title: Byebye
-  details: 滑稽
-footer: 
+  - title: 白日梦想家
+    details: 去追寻自己的25号底片
+  - title: 死亡诗社
+    details: 抓住当下
+  - title: 小妇人
+    details: 忠于自己，不负爱与自由
+footer:
 ---
-
 
 <!-- ---
 # Front Matter
@@ -25,7 +24,7 @@ lang: zh-CN
 # sidebar: auto
 --- -->
 
-<!-- 
+<!--
 [[toc]]
 
 ## Sub heading 1
@@ -60,7 +59,6 @@ export default {
   }
 }
 ``` -->
-
 
 <!-- # npx vuepress dev docs -->
 

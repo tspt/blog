@@ -7,7 +7,17 @@ meta:
     content: js,ts
 ---
 
-# TypeScript
+## 环境配置
+
+```js
+npm i -g typescript
+npm i -g ts-node
+
+// 创建一个tsconfig.json文件
+tsc --init
+
+// 创建一个index.ts编写代码，练习代码时，执行 ts-node index.ts
+```
 
 ## 变量
 
@@ -461,6 +471,33 @@ color.setShadow("0 0 0");
 console.log(color.getShadow());
 ```
 
+### 接口继承类
+
+在接口继承类的时候，也只会继承它的实例属性和实例方法
+
+```js
+class Point {
+  x: number;
+  y: number;
+  constructor(x: number, y: number) {
+    this.x = x;
+    this.y = y;
+  }
+}
+
+interface PointInstanceType {
+  x: number;
+  y: number;
+}
+
+// 等价于 interface Point3d extends PointInstanceType
+interface Point3d extends Point {
+  z: number;
+}
+
+let point3d: Point3d = { x: 1, y: 2, z: 3 };
+```
+
 ## 函数
 
 ### 函数类型
@@ -853,7 +890,8 @@ c.b = null; // error, 'null' is not assignable to 'number | undefined'
 
 1.基础数据类型：与接口不同，类型别名还可以用于其他类型，如基本类型（原始值）、联合类型、元组  
 2.重复定义：接口可以定义多次，会被自动合并为单个接口；类型别名不可以重复定义  
-3.扩展：接口可以扩展类型别名，类型别名也可以扩展接口。但是两者实现扩展的方式不同
+3.扩展：接口可以扩展类型别名，类型别名也可以扩展接口。但是两者实现扩展的方式不同  
+4.type 能使用 in 关键字生成映射类型，但 interface 不行
 
 - 接口的扩展就是继承，通过 extends 来实现。
 - 类型别名的扩展就是交叉类型，通过 & 来实现。
@@ -1001,4 +1039,366 @@ import MyComponent from "./myComponent";
 
 <MyComponent />; // 正确
 <SomeOtherComponent />; // 错误
+```
+
+## 内置工具类型
+
+### Record
+
+定义对象。  
+源码
+
+```js
+type Record<K extends string | number | symbol, T> = {
+  [P in K]: T;
+}
+```
+
+使用
+
+```js
+type Fruit = "orange" | "banana" | "apple";
+type Specifications = {
+  weight: number,
+  size: string,
+};
+const myFruit: Record<Fruit, Specifications> = {
+  orange: {
+    weight: 9,
+    size: "big",
+  },
+  banana: {
+    weight: 6,
+    size: "medium",
+  },
+  apple: {
+    weight: 7,
+    size: "small",
+  },
+};
+```
+
+### Partial
+
+所有属性都是可选项。  
+源码
+
+```js
+type Partial<T> = {
+  [P in keyof T]?: T[P]
+}
+```
+
+使用
+
+```js
+interface Foo {
+  name: string
+  age: number
+}
+type Bar = Partial<Foo>
+// 相当于
+type Bar = {
+  name?: string
+  age?: number
+}
+```
+
+### Required
+
+所有属性都是必选项。  
+源码
+
+```js
+type Require<T> = {
+  [p in keyof T]-?: T[P]
+}
+```
+
+使用
+
+```js
+interface Foo {
+  name: string
+  age?: number
+}
+type Bar = Required<Foo>
+// 相当于
+type Bar = {
+  name: string
+  age: number
+}
+```
+
+### Readonly
+
+所有属性都是只读的。  
+源码
+
+```js
+type Readonly<T> = {
+  [p in keyof T]: T[P]
+}
+```
+
+使用
+
+```js
+interface Foo {
+  name: string
+  age: number
+}
+type Bar = Readonly<Foo>
+// 相当于
+type Bar = {
+  readonly name: string
+  readonly age: number
+}
+```
+
+### Pick
+
+取交集，新类型 相当于 T 与 K 的交集。  
+源码
+
+```js
+type Pick<T, K extends keyof T> = {
+  [P in K]: T[P];
+};
+```
+
+使用
+
+```js
+interface Foo {
+  name: string;
+  age?: number;
+  gender: string;
+}
+type Bar = Pick<Foo, 'age' | 'gender'>
+// 相当于
+type Bar = {
+  age?: number
+  gender: string
+}
+
+const todo: Bar= {
+  age?: 3,
+  gender: 男
+};
+console.log(todo)
+```
+
+### Exclude
+
+如果 T 是 U 的子类型则返回 never 不是则返回 T。  
+源码
+
+```js
+type Exclude<T, U> = T extends U ? never : T
+```
+
+使用
+
+```js
+type A = number | string | boolean;
+type B = number | boolean;
+
+type Foo = Exclude<A, B>;
+// 相当于
+type Foo = string;
+```
+
+### Extract
+
+和 Exclude 相反。  
+源码
+
+```js
+type Extract<T, U> = T extends U ? T : never
+```
+
+使用
+
+```js
+type A = number | string | boolean;
+type B = number | boolean;
+
+type Foo = Extract<A, B>;
+// 相当于
+type Foo = number | boolean;
+```
+
+### Omit
+
+生成一个新类型，该类型拥有 T 中除了 K 属性以外的所有属性。  
+源码
+
+```js
+type Omit<T, K extends keyof any> = Pick<T, Exclude<keyof T, K>>
+```
+
+使用
+
+```js
+type Foo = {
+	name: string
+	age: number
+}
+
+type Bar = Omit<Foo, 'age'>
+// 相当于
+type Bar = {
+	name: string
+}
+```
+
+## 实用技巧
+
+### keyof
+
+可以用来取得一个对象接口的所有 key 值
+
+```js
+interface Person {
+  name: string;
+  age: number;
+  gender: "male" | "female";
+}
+//type PersonKey = 'name'|'age'|'gender';
+type PersonKey = keyof Person;
+
+function getValueByKey(p: Person, key: PersonKey) {
+  return p[key];
+}
+let val = getValueByKey({ name: "hello", age: 10, gender: "male" }, "name");
+console.log(val);
+```
+
+### 映射类型 in
+
+```js
+interface Person {
+  name: string;
+  age: number;
+  gender: "male" | "female";
+}
+//批量把一个接口中的属性都变成可选的
+type PartPerson = {
+  [Key in keyof Person]?: Person[Key];
+};
+
+let p1: PartPerson = {};
+```
+
+### + -
+
+为映射类型增加了增加或移除特定修饰符的能力。特别地，映射类型里的 readonly 或 ? 属性修饰符现在可以使用+或-前缀，来表示修饰符是添加还是移除。
+
+```js
+
+例子
+type MutableRequired<T> = { -readonly [P in keyof T]-?: T[P] };  // 移除readonly和?
+type ReadonlyPartial<T> = { +readonly [P in keyof T]+?: T[P] };  // 添加readonly和?
+```
+
+## 装饰器
+
+分类：类装饰器、属性装饰器、方法装饰器、参数装饰器
+
+- 有多个参数装饰器时：从最后一个参数依次向前执行
+- 方法和方法参数，参数装饰器先执行。
+- 方法和属性装饰器，谁在前面谁先执行。
+- 因为参数属于方法一部分，所以参数会一直紧紧挨着方法执行
+- 类装饰器总是最后执行
+
+```js
+function Class1Decorator() {
+  return function (target: any) {
+    console.log("类1装饰器");
+  };
+}
+function Class2Decorator() {
+  return function (target: any) {
+    console.log("类2装饰器");
+  };
+}
+function MethodDecorator() {
+  return function (target: any, methodName: string, descriptor: PropertyDescriptor) {
+    console.log("方法装饰器");
+  };
+}
+function Param1Decorator() {
+  return function (target: any, methodName: string, paramIndex: number) {
+    console.log("参数1装饰器");
+  };
+}
+function Param2Decorator() {
+  return function (target: any, methodName: string, paramIndex: number) {
+    console.log("参数2装饰器");
+  };
+}
+function PropertyDecorator(name: string) {
+  return function (target: any, propertyName: string) {
+    console.log(name + "属性装饰器");
+  };
+}
+
+@Class1Decorator()
+@Class2Decorator()
+class Person {
+  @PropertyDecorator("name")
+  name: string = "hello";
+  @PropertyDecorator("age")
+  age: number = 10;
+  @MethodDecorator()
+  greet(@Param1Decorator() p1: string, @Param2Decorator() p2: string) {}
+}
+
+/**
+  name属性装饰器
+  age属性装饰器
+  参数2装饰器
+  参数1装饰器
+  方法装饰器
+  类2装饰器
+  类1装饰器
+ */
+```
+
+## Vue3+TS 案例
+
+```vue
+<script setup lang="ts">
+import type { ElForm } from "element-plus";
+
+type Props = {
+  title: string;
+  author: string;
+  content: string;
+};
+
+const props = widthDefaults(definedProps<Props>(), {
+  title: "book",
+  author: "peter",
+  content: "this is a paragraph",
+});
+
+const emit = definedEmits<{
+  (e: "update:visible", visible: boolean): void;
+  (e: "change", status: string): void;
+}>();
+
+const inputEl = ref<HTMLInputElement | null>(null);
+const formEl = ref<InstanceType<typeof ElForm> | null>(null);
+
+const resetBookInfo = () => {
+  formEl.value!.resetFields();
+};
+const getBookInfo = () => {};
+
+defineExpose({
+  getBookInfo,
+});
+</script>
 ```

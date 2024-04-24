@@ -7,15 +7,14 @@ meta:
     content: tool,gulp
 ---
 
-## Gulp
+## Node 通配符
 
-**Node 通配符**  
 `*.less` 匹配当前文件所有 less 文件  
 `**/*.less` 匹配当前目录及其子目录下的所有 less 文件  
 `!demo.less` 非 demo.less 文件  
 `*.+(scss|less)` 匹配当前目录的所有 scss 或 less 文件
 
-### gulp.src(globs [, options])
+## gulp.src(globs [, options])
 
 类似于读取文件，返回符合匹配模式或者匹配模式的数组的文件  
 **globs**  
@@ -28,7 +27,7 @@ options.read
 options.base  
 类型：String，拼接在 glob 前
 
-### gulp.dest(path [, options])
+## gulp.dest(path [, options])
 
 类似于输出文件，能被 pipe 进来，并且将会写文件，重新输出所有数据，如果文件夹不存在，将自动创建  
 **path**  
@@ -40,7 +39,7 @@ options.cwd
 options.mode  
 类型：String，默认值 0777，定义所有在输出目录中所创建目录的权限
 
-### gulp.task(name [, deps] [, fn])
+## gulp.task(name [, deps] [, fn])
 
 创建一个任务  
 **name**  
@@ -50,7 +49,7 @@ options.mode
 **fn**  
 类型：Function，定义任务所要执行的主要操作
 
-### gulp.watch(glob [, opts], tasks)
+## gulp.watch(glob [, opts], tasks)
 
 创建监听  
 **glob**  
@@ -60,7 +59,7 @@ options.mode
 **tasks**  
 类型：Array，需要在文件变动后执行一个或多个通过 gulp.task()创建的 task 名字
 
-### gulp.watch(glob [, opts， cb])
+## gulp.watch(glob [, opts， cb])
 
 创建监听  
 **glob**  
@@ -75,7 +74,7 @@ event.type
 event.path  
 类型：String，触发该事件的文件路径
 
-### gulp-
+## gulp-
 
 **gulp-htmlmin**  
 压缩 html：压缩 JavaScript、CSS，去掉页面空格、注释，删除多于属性等操作

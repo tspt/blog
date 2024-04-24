@@ -7,9 +7,7 @@ meta:
     content: js,vue
 ---
 
-# Vue3
-
-## 初始化 vue 实例
+## 初始化实例
 
 ```js
 // main.js
@@ -35,8 +33,6 @@ createApp(APP).use(store).use(router).mount("#app");
 - renderTracked
 - renderTriggered
 
-````
-
 ## 组件注册
 
 ### 全局注册
@@ -45,7 +41,7 @@ createApp(APP).use(store).use(router).mount("#app");
 import Button from "./Button";
 const app = createApp(APP);
 app.component(Button.name, Button);
-````
+```
 
 ### 异步组件
 
@@ -385,4 +381,42 @@ export default {
   <div :key="'heading-' + item.id">...</div>
   <span :key="'content-' + item.id">...</span>
 </template>
+```
+
+## 选择器
+
+### :deep
+
+深度选择器：针对子组件的样式
+
+```css
+<style scoped>
+:deep(.inner-item) {
+  color: #000;
+}
+</style>
+```
+
+### :slotted
+
+插槽选择器：针对组件中插槽内容的样式
+
+```css
+<style scoped>
+:slotted(.content) {
+  background: #fff;
+}
+</style>
+```
+
+### :global
+
+全局选择器：把样式应用到全局，不需要新写一个<style>标签
+
+```css
+<style scoped>
+:global(.title) {
+  color: #000;
+}
+</style>
 ```

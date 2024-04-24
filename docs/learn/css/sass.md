@@ -7,9 +7,7 @@ meta:
     content: css,sass
 ---
 
-## Sass
-
-### 1. Sass 环境配置
+## 环境配置
 
 - 下载 ruby 安装包，查看 ruby 安装成功：ruby -v
 - 移除 gem 源：gem sources --remove https://rubygems.org/
@@ -19,9 +17,9 @@ meta:
 - 更新 sass：gem update sass
 - 查看 sass 安装成功：sass -v
 
-### 2. Sass 运行
+## 命令行编译
 
-#### 2.1 命令行编译
+### 命令行编译
 
 ```
 //单文件
@@ -32,7 +30,7 @@ sass --watch index.scss:index.scss
 sass --watch src/assets/sass:src/assets/css
 ```
 
-#### 2.2 命令行编译配置选项
+### 命令行编译配置选项
 
 ```
 //解析后排版格式
@@ -41,9 +39,7 @@ sass --watch src/assets/sass:src/assets/css
 --sourcemap
 ```
 
-### 3. 写法
-
-#### 3.1 嵌套
+## 嵌套
 
 ```css
 .side {
@@ -57,7 +53,7 @@ sass --watch src/assets/sass:src/assets/css
 }
 ```
 
-#### 3.1.1 属性嵌套
+### 属性嵌套
 
 ```css
 .nav {
@@ -69,12 +65,12 @@ sass --watch src/assets/sass:src/assets/css
 }
 ```
 
-#### 3.2 注释
+## 注释
 
 多行注释`/**/`会被编译到 css 文件中，单行注释`//`不会  
 compressed 模式下，多行注释第一个字符为!时，会保留该注释
 
-#### 3.3 变量
+## 变量
 
 ```css
 $basecolor: #363636;
@@ -88,7 +84,7 @@ $basecolor: #363636;
 }
 ```
 
-#### 3.4 数据类型
+## 数据类型
 
 - 数字
 - 字符串
@@ -97,7 +93,7 @@ $basecolor: #363636;
 - 数组，空格或逗号隔开
 - map
 
-#### 3.5 运算符
+## 运算符
 
 /：
 
@@ -111,9 +107,9 @@ $basecolor: #363636;
 
 !default：给变量赋值，如果值为 null 或未赋值过
 
-#### 3.6 @-Rules 与指令
+## @-Rules 与指令
 
-#### 3.6.1 @import
+### @import
 
 @import "_index.scss"加入`_`不会编译该文件  
 @import 四类普通 css 语句
@@ -123,7 +119,7 @@ $basecolor: #363636;
 - url()
 - media queries
 
-#### 3.6.2 @media
+### @media
 
 @media 嵌套在 css 规则内，会编译到最外层，包含嵌套的父选择器
 
@@ -148,7 +144,7 @@ $basecolor: #363636;
 }
 ```
 
-#### 3.6.3 @extend
+### @extend
 
 @extend 继承所有包含该选择器的样式  
 @extend 多重延伸
@@ -223,7 +219,7 @@ a.square {
 
 @media 中，@extend 必须延伸相同指令层中的选择器
 
-#### 3.7 @at-root
+## @at-root
 
 @at-root
 
@@ -262,9 +258,9 @@ a.square {
 }
 ```
 
-#### 3.8 控制指令
+## 控制指令
 
-#### 3.8.1 if() @if
+### if() @if
 
 ```css
 $basecolor: #999;
@@ -281,7 +277,7 @@ $basecolor: #999;
 }
 ```
 
-#### 3.8.2 @for
+### @for
 
 ```css
 //to范围 [n, m)
@@ -298,7 +294,7 @@ $basecolor: #999;
 }
 ```
 
-#### 3.8.3 @each
+### @each
 
 ```css
 //@each $var in <list>
@@ -321,7 +317,7 @@ $basecolor: #999;
 }
 ```
 
-#### 3.8.4 @while
+### @while
 
 ```css
 $i: 6;
@@ -333,9 +329,9 @@ $i: 6;
 }
 ```
 
-#### 3.9 混合指令
+## 混合指令
 
-#### 3.9.1 @mixin @include
+### @mixin @include
 
 ```css
 //定义
@@ -395,7 +391,7 @@ $colors: #666, #999, #c6c6c6;
 }
 ```
 
-#### 3.9.2 @content
+### @content
 
 ```css
 //向混合样式导入内容
@@ -410,12 +406,14 @@ $colors: #666, #999, #c6c6c6;
 }
 ```
 
-#### 3.9.3 书写方便
+### 书写方便
 
-> @mixin 简写 =  
->  @include 简写 +
+::: tip 提示
+@mixin 简写 =  
+@include 简写 +
+:::
 
-#### 3.10 函数指令
+## 函数指令
 
 @function @return
 

@@ -7,26 +7,7 @@ meta:
     content: js,es6
 ---
 
-## ES6
-
-- [块作用域](#blockscope)
-- [变量解构](#vardeconst)
-- [运算符 扩展](#operator)
-- [String 扩展](#string)
-- [正则表达式](#regexp)
-- [Number 扩展](#number)
-- [Function 扩展](#function)
-- [Array 扩展](#array)
-- [Object 扩展](#object)
-- [Symbol](#symbol)
-- [Set 和 Map 结构](#set-map)
-- [Iterator 和 for...of 循环](#iterator)
-- [Generator](#generator)
-- [Async](#async)
-- [Class](#class)
-- [模块](#module)
-
-## <span id="blockscope" style="color: #000">块作用域</span>
+## 块作用域
 
 ---
 
@@ -39,7 +20,7 @@ const 声明的变量必须初始化，针对复合类型的数据，数据结�
 var/function 声明的全局变量是顶处对象的属性，let/const/class 声明的全局变量不是顶处对象的属性；  
 globalThis 指向全局对象 window。
 
-## <span id="vardeconst" style="color: #000">变量解构</span>
+## 变量解构
 
 ---
 
@@ -56,7 +37,7 @@ let { color, opacity } = { color: "#ffa500", opacity: 1 };
 
 针对函数参数、数组、对象，...变量名必须是最后一个参数
 
-## <span id="operator" style="color: #000">运算符 扩展</span>
+## 运算符 扩展
 
 `?.` 链判断运算符?.有三种写法。
 
@@ -99,7 +80,7 @@ x ??= y; // x ?? (x = y)
 console.log(x, y); // 0 2
 ```
 
-## <span id="string" style="color: #000">String 扩展</span>
+## String 扩展
 
 ---
 
@@ -137,7 +118,7 @@ str.trimStart();    // 去掉头部空格
 str.trimEnd();    // 去掉尾部空格
 ```
 
-## <span id="regexp" style="color: #000">正则表达式</span>
+## 正则表达式
 
 ---
 
@@ -283,7 +264,7 @@ for (const result of s.matchAll(reg)) {
 Array.from(s.matchAll(reg));
 ```
 
-## <span id="number" style="color: #000">Number 扩展</span>
+## Number 扩展
 
 ---
 
@@ -368,7 +349,7 @@ let a = 2;
 a **= 2 ** 7; // 3.402823669209385e+38
 ```
 
-## <span id="math" style="color: #000">Math</span>
+## Math
 
 ---
 
@@ -388,7 +369,7 @@ Math.cbrt(value)
 Math.hypot(value1, value2, value3...)
 ```
 
-## <span id="function" style="color: #000">Function 扩展</span>
+## Function 扩展
 
 ---
 
@@ -446,7 +427,7 @@ try {
 }
 ```
 
-## <span id="array" style="color: #000">Array 扩展</span>
+## Array 扩展
 
 ---
 
@@ -550,7 +531,7 @@ Array.prototype.flatMap(callback)
 [1, 2, [3, [4, 5]]].flatMap((element, index, array) => element);     // [1, 2, 3, [4, 5]]
 ```
 
-## <span id="object" style="color: #000">Object 扩展</span>
+## Object 扩展
 
 ---
 
@@ -666,7 +647,7 @@ Object.fromEntries(arrayObj)
 Object.fromEntries([["color", "#ffa500"], ["opacity", 1]]); // {color: "#ffa500", opacity: 1}
 ```
 
-## <span id="symbol" style="color: #000">Symbol</span>
+## Symbol
 
 ---
 
@@ -713,7 +694,7 @@ symbol.split; // string.prototype.split 被调用
 
 可以用于消除强耦合的具体字符串或数字，替换对应值。
 
-## <span id="set-map" style="color: #000">Set 和 Map 结构</span>
+## Set 和 Map 结构
 
 ---
 
@@ -832,7 +813,7 @@ WeakMap.prototype.has(value);
 WeakMap.prototype.clear();
 ```
 
-## <span id="iterator" style="color: #000">Iterator 和 for...of 循环</span>
+## Iterator 和 for...of 循环
 
 ---
 
@@ -856,7 +837,7 @@ Array、Map、Set、String、TypedArray、函数的 arguments 对象、NodeList 
 - yield\*
 - 其他场合
 
-## <span id="generator" style="color: #000">Generator</span>
+## Generator
 
 ---
 
@@ -908,7 +889,7 @@ let color = {
 };
 ```
 
-## <span id="async" style="color: #000">Async</span>
+## Async
 
 ---
 
@@ -928,7 +909,7 @@ await 后面的异步操作出错，等同于 async 函数返回的 Promise 对�
 任何一个 await 语句后面的 Promise 对象变为 reject 状态，整个 async 函数都会中断执行；  
 将 await 代码放在 try...catch 代码块中，防止出现 reject 状态时，中断了执行。
 
-## <span id="class" style="color: #000">Class</span>
+## Class
 
 ---
 
@@ -1038,7 +1019,7 @@ Object.getPrototypeOf(Color) === Base;
 
 super 作为对象，在普通方法中，指向父类的原型对象；静态方法中，指向父类。
 
-## <span id="module" style="color: #000">模块</span>
+## 模块
 
 ---
 

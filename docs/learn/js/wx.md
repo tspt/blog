@@ -7,8 +7,6 @@ meta:
     content: js,小程序
 ---
 
-# 小程序
-
 ## 基础
 
 - import 不具有递归的特性
@@ -53,7 +51,7 @@ meta:
 
 ```js
 Page({
-  onShareAppMessage: function() {
+  onShareAppMessage: function () {
     return {
       title: "自定义转发标题",
       path: "/page/user?id=123",
@@ -128,4 +126,3 @@ catch 可以阻止冒泡事件向上冒泡，catch: 以及 capture-catch:
 - placeholder-class 用于指定 placeholder 的相关样式
 - button 的 formType="submit" 和 form 的 bindSubmit="方法"用于提交表单
 - background 的 url 只能用 base64 或线上地址
--
