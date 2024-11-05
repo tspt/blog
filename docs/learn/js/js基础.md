@@ -473,3 +473,10 @@ a.html 欲与 c.html 跨域相互通信，通过中间页 b.html 来实现。 �
   - 会受到浏览器隐身模式等的限制
 - 设置共享 cookie 与不断轮询脏检查(setInterval)
 - 借助服务端或者中间层实现
+
+## 全局方法
+
+### encodeURI 和 encodeURIComponent
+
+1. encodeURI 对 URL 编码，可以直接浏览器访问
+2. encodeURIComponent 对 URL 的参数编码

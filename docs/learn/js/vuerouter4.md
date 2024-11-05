@@ -33,7 +33,26 @@ createApp(APP).use(store).use(router).mount("#app");
 
 ## 组合式 API
 
+```js
+import { useRouter, useRoute } from "vue-router";
+
+const router = useRouter();
+const route = useRoute();
+```
+
 ## 扩展 Routerlink
+
+## 导航故障
+
+### 全局导航故障
+
+```js
+router.afterEach((to, from, failure) => {
+  if (failure) {
+    sendToAnalytics(to, from, failure);
+  }
+});
+```
 
 ## 动态路由
 

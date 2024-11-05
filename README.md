@@ -8,4 +8,5 @@
 
 # 发布
 
+在 git bash 里面执行该命令
 `npm run deploy`
