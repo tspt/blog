@@ -59,9 +59,32 @@ import { defineConfig, normalizePath } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'; // 用于生成 svg 雪碧图
 import viteImagemin from 'vite-plugin-imagemin'; // 图片压缩
-import AutoImport from 'unplugin-auto-import/vite'; // ElementPlus 打包时会自动引入
-import Components from 'unplugin-vue-components/vite'; // ElementPlus 打包时会自动引入
-import { ElementPlusResolver, VantResolver } from 'unplugin-vue-components/resolvers'; // ElementPlus 打包时会自动引入
+import AutoImport from 'unplugin-auto-import/vite'; // 按需引入ElementPlus
+import Components from 'unplugin-vue-components/vite'; // 按需引入ElementPlus
+import { ElementPlusResolver, VantResolver } from 'unplugin-vue-components/resolvers'; // 按需引入ElementPlus
+import { createStyleImportPlugin, ElementPlusResolve } from 'vite-plugin-style-import'; // 按需引入ElementPlus的样式
+import compression from 'vite-plugin-compression'; // 打包压缩
+import { createHtmlPlugin } from 'vite-plugin-html'; // 注：指定entry后，不需要在index.html添加script标签，若添加了建议删除
+import postcssPresetEnv from 'postcss-preset-env'; // postcss 配置
+// 用 normalizePath 解决 window 下的路径问题
+// const variablePath = normalizePath(path.resolve('./src/assets/v1/css/base/variable.scss'));
+
+const HTMLDATA = {
+  NODE_ENV: process.env.NODE_ENV,
+  js: [
+    { url: `${APP_CDN}libs/vue.global.prod.js`, mode: 'defer' },
+    { url: `${APP_CDN}libs/vue-router.global.prod.js`, mode: 'defer' },
+    { url: `${APP_CDN}libs/vue-i18n.global.prod.js`, mode: 'defer' },
+    { url: `${APP_CDN}libs/vuex.global.prod.js`, mode: 'defer' },
+    { url: `${APP_CDN}libs/vuex-persistedstate.umd.js`, mode: 'defer' },
+    { url: `${APP_CDN}libs/index.iife.min.js`, mode: 'defer' },
+    { url: `${APP_CDN}libs/axios.min.js`, mode: 'defer' },
+    { url: `${APP_CDN}libs/gwm.js`, mode: 'defer' },
+    { url: `${APP_CDN}libs/Vibrant.min.js`, mode: 'defer' }
+  ],
+  title: '工单管理',
+  exclude: ['vue', 'vuex', 'vuex-persistedstate', 'vue-i18n', 'vue-router', 'axios', 'gwm', 'xss', 'crypto', 'fs', 'vue-demi']
+};
 
 export default defineConfig({
   baseUrl: './",
@@ -117,6 +140,41 @@ export default defineConfig({
     }),
     Components({
       resolvers: [ElementPlusResolver()]
+    }),
+    createStyleImportPlugin({
+      resolves: [ElementPlusResolve()],
+      libs: [
+        {
+          libraryName: 'element-plus',
+          esModule: true,
+          resolveStyle: (name) => {
+            return `element-plus/theme-chalk/${name}.css`;
+          }
+        }
+      ]
+    }),
+    // 其他插件...
+    compression({
+      algorithm: 'gzip', // 指定压缩算法为gzip,[ 'gzip' , 'brotliCompress' ,'deflate' , 'deflateRaw']
+      ext: '.gz', // 指定压缩后的文件扩展名为.gz
+      threshold: 51200, // 仅对文件大小大于threshold的文件进行压缩，默认为10KB
+      deleteOriginFile: false, // 是否删除原始文件，默认为false
+      // filter: /\.(js|css|json|html|ico|svg)(\?.*)?$/i, // 匹配要压缩的文件的正则表达式，默认为匹配.js、.css、.json、.html、.ico和.svg文件
+      // compressionOptions: { level: 9 }, // 指定gzip压缩级别，默认为9（最高级别）
+      verbose: true, //是否在控制台输出压缩结果
+      disable: false //是否禁用插件
+    }),
+    // 一个针对 index.html，提供压缩和基于 ejs 模板功能的 vite 插件
+    createHtmlPlugin({
+      minify: true,
+      inject: {
+        data: {
+          HTMLDATA
+        }
+      },
+      // 注：指定entry后，不需要在index.html添加script标签，若添加了建议删除
+      entry: './src/main.js',
+      template: './index.html'
     }),
   },
   build: {
@@ -180,6 +238,71 @@ export default defineConfig({
         }
       }
     }
+  },
+  css: {
+    transformer: 'postcss', //该选项用于选择用于 CSS 处理的引擎
+    devSourcemap: true, // 在开发过程中是否启用 sourcemap。
+    preprocessorOptions: {
+      sass: {
+        // additionalData: `@import "${variablePath}";`
+        additionalData: `@import './src/assets/v1/css/base/variable.scss';`
+      }
+    },
+    postcss: {
+      plugins: [
+        postcssPresetEnv({
+          stage: 3
+        })
+      ]
+    },
+    preprocessorMaxWorkers: 4 // 限制最大并发进程数为 4
+  },
+  server: {
+    cors: true,
+    open: true,
+    host: '172.18.20.189',
+    port: 8080,
+    strictPort: true,
+    https: false,
+    proxy: {
+      '/work-order/': {
+        target: 'http://kabwos.dev.live800.com/work-order/',
+        changeOrigin: true,
+        rewrite: (path1) => path1.replace(/^\/work-order/, '')
+      }
+    },
+    hmr: {
+      overlay: true
+    }
   }
 });
+```
+
+## 配置项 index.html
+
+```html
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <title><%= HTMLDATA.title %></title>
+    <% if(HTMLDATA && HTMLDATA.NODE_ENV==="production" ) {%> <% for (var i in HTMLDATA.css) { %>
+    <link href="<%= HTMLDATA.css[i] %>" rel="preload" />
+    <% } %> <% for (var j in HTMLDATA.js) { %>
+    <script defer src="<%= HTMLDATA.js[j].url %>"></script>
+    <% } %> <% } else {%>
+    <script src="<%= VITE_APP_CDN %>libs/Vibrant.min.js"></script>
+    <% } %>
+  </head>
+  <body>
+    <noscript>
+      <strong>We're sorry but <%= HTMLDATA.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+    </noscript>
+    <div id="app" class="app-main"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
 ```
