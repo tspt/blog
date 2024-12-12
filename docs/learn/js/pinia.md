@@ -76,10 +76,17 @@ export default {
   },
   setup() {
     const articleStore = new useArticleStore();
+    // articleStore.amount
+    // articleStore.titleLen
     return {
       articleStore,
     };
   },
+  methods: {
+    initInfo() {
+      articleStore.setInfo"111", "222", 2);
+    }
+  }
 };
 ```
 
@@ -100,10 +107,11 @@ export default {
         return store.amount * 6;
       },
     }),
-    ...mapActions(useCounterStore, ["setInfo"]),
+    ...mapActions(useArticleStore, ["setInfo"]),  // useArticleStore.setInfo()
+    ...mapActions(useArticleStore, { setInfoNew: 'setInfo' }),  // this.setInfoNew()
   },
   mounted: function () {
-    // this.setInfo"111", "222", 2);
+    this.setInfo"111", "222", 2);
   },
 };
 ```
@@ -187,4 +195,84 @@ exports const infoStore = defineStore({
   },
   actions: {}
 });
+```
+
+## 插件
+
+可以执行的操作列表：
+
+- 向 Store 添加新属性
+- 定义 Store 时添加新选项
+- 为 Store 添加新方法
+- 包装现有方法
+- 更改甚至取消操作
+- 实现本地存储等副作用
+- 仅适用于特定 Store
+
+插件仅适用于**在将 pinia 传递给应用程序后创建的 store**，否则将不会被应用。
+
+```js
+import { createPinia } from "pinia";
+const pinia = createPinia();
+
+function myPiniaPlugin(content) {
+  // context.pinia // 使用 `createPinia()` 创建的 pinia
+  // context.app // 使用 `createApp()` 创建的当前应用程序（仅限 Vue 3）
+  // context.store // 插件正在扩充的 store
+  // context.options // 定义存储的选项对象传递给`defineStore()`
+}
+
+pinia.use(myPiniaPlugin);
+```
+
+### 扩充 store
+
+通过返回对象，为每一个 store 添加属性
+
+```js
+pinia.use(() => ({
+  info: "test",
+}));
+```
+
+### 在插件中调用
+
+```js
+pinia.use(({ store }) => {
+  store.$subscribe(() => {
+    // 在存储变化的时候执行
+  });
+  // 在 action 的时候执行
+  store.$onAction(
+    ({
+      name, // action 的名字
+      store, // store 实例
+      args, // 调用这个 action 的参数
+      after, // 在这个 action 执行完毕之后，执行这个函数
+      onError, // 在这个 action 抛出异常的时候，执行这个函数
+    }) => {
+      // 记录开始的时间变量
+      const startTime = Date.now();
+      // 这将在 `store` 上的操作执行之前触发
+      console.log(`Start "${name}" with params [${args.join(", ")}].`);
+
+      // 如果 action 成功并且完全运行后，after 将触发。
+      // 它将等待任何返回的 promise
+      after((result) => {
+        console.log(`Finished "${name}" after ${Date.now() - startTime}ms.\nResult: ${result}.`);
+      });
+
+      // 如果 action 抛出或返回 Promise.reject ，onError 将触发
+      onError((error) => {
+        console.warn(`Failed "${name}" after ${Date.now() - startTime}ms.\nError: ${error}.`);
+      });
+    }
+  );
+})``;
+```
+
+### 持久化
+
+```js
+npm i pinia-plugin-persistedstate
 ```
