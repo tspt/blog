@@ -7,6 +7,10 @@ meta:
     content: js,vue
 ---
 
+## 安装
+
+`npm create vue@latest`
+
 ## 初始化实例
 
 ```js
@@ -71,6 +75,45 @@ app.component("button", asyncModal);
     button: asyncModal;
   }
 }
+```
+
+## 模板语法
+
+### 同名简写
+
+v3.4 及其以上
+
+```vue
+<!-- :id="id"  -->
+<div :id></div>
+```
+
+### 动态绑定多个值
+
+```vue
+<div v-bind="objectOfAttrs"></div>
+
+<script>
+const objectOfAttrs = {
+  id: "container",
+  class: "wrapper",
+  style: "background-color:green",
+};
+</script>
+```
+
+## 列表渲染
+
+### 改变原数组
+
+```js
+push();
+pop();
+shift();
+unshift();
+splice();
+sort();
+reverse();
 ```
 
 ## prop
@@ -263,7 +306,13 @@ export default {
     const getLists = () => {};
 
     // 只读响应式
-    const doubleCounter = computed(() => counter.value * 2);
+    // 计算属性的 getter 的第一个参数来获取计算属性返回的上一个值
+    const doubleCounter = computed((previous) => {
+      if (counter.value > 2) {
+        return counter.value * 2;
+      }
+      return previous;
+    });
 
     console.log(doubleCounter.value); // 2
 
