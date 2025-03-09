@@ -23,6 +23,8 @@ createApp(APP).use(store).use(router).mount("#app");
 
 ## 生命周期
 
+选项式
+
 - beforeCreate
 - created
 - beforeMount
@@ -36,6 +38,20 @@ createApp(APP).use(store).use(router).mount("#app");
 - errorCaptured
 - renderTracked
 - renderTriggered
+
+组合式由 setup 替代
+
+- onBeforeMount
+- onMounted
+- onBeforeUpdate
+- onUpdated
+- onActivated
+- onDeactivated
+- onBeforeUnmount
+- onUnmounted
+- onErrorCaptured
+- onRenderTracked
+- onRenderTriggered
 
 ## 组件注册
 
@@ -166,6 +182,67 @@ export default {
 export default {
   inject: ['title']
 }}
+```
+
+## watch
+
+### 副作用清理
+
+`onWatcherCleanup();`
+
+```js
+import { watch, onWatcherCleanup } from "vue";
+
+watch(id, (newId) => {
+  const controller = new AbortController();
+
+  fetch(`/api/${newId}`, { signal: controller.signal }).then(() => {
+    // 回调逻辑
+  });
+
+  onWatcherCleanup(() => {
+    // 终止过期请求
+    controller.abort();
+  });
+});
+```
+
+### post watchers
+
+```js
+watch(source, callback, {
+  flush: "post" /* 在 Vue 更新后执行 */,
+});
+
+// 等效于
+watchPostEffect(() => {});
+```
+
+### 同步侦听器
+
+```js
+watch(source, callback, {
+  flush: "sync" /* 在响应式数据变化时同步执行 */,
+});
+
+// 等效于
+watchSyncEffect(() => {});
+```
+
+侦听器必须用同步语句创建：如果用异步回调创建一个侦听器，那么它不会绑定到当前组件上，你必须手动停止它，以防内存泄漏。如下方这个例子
+
+```vue
+<script setup>
+import { watchEffect } from "vue";
+
+// 它会自动停止
+watchEffect(() => {});
+
+// ...这个则不会！
+setTimeout(() => {
+  watchEffect(() => {});
+}, 100);
+</script>
 ```
 
 ## 自定义事件
@@ -317,9 +394,16 @@ export default {
     console.log(doubleCounter.value); // 2
 
     // 监听 counter
-    watch(counter, (newVal, oldVal) => {
-      console.log(newVal, oldVal);
-    });
+    watch(
+      counter,
+      (newVal, oldVal) => {
+        console.log(newVal, oldVal);
+      },
+      {
+        immediate: true,
+        deep: true,
+      }
+    );
 
     watch(name, (newVal, oldVal) => {
       console.log(newVal, oldVal);
@@ -336,13 +420,106 @@ export default {
 };
 ```
 
+### watch
+
+```js
+const x = ref(0);
+const y = ref(0);
+
+// 单个 ref
+watch(x, (newX) => {
+  console.log(`x is ${newX}`);
+});
+
+// getter 函数
+watch(
+  () => x.value + y.value,
+  (newValue) => {
+    console.log(`sum of x + y is: ${newValue}`);
+  }
+);
+
+// 多个来源组成的数组
+watch([x, () => y.value], ([newX, newY]) => {
+  console.log(`x is ${newX} and y is ${newY}`);
+});
+
+const obj = reactive({ count: 0, result: { status: 100, list: [] } });
+
+// 监听某个属性
+watch(
+  () => obj.count,
+  (newValue) => {
+    console.log(`Count is: ${newValue}`);
+  }
+);
+
+// 监听整个响应式对象，（隐式地创建一个深层侦听器）
+watch(obj, (newValue, oldValue) => {
+  // 在嵌套的属性变更时触发
+  // 注意：`newValue` 此处和 `oldValue` 是相等的
+  // 因为它们是同一个对象！
+});
+// 等效于
+watch(
+  () => obj,
+  (newValue, oldValue) => {},
+  { deep: true }
+);
+
+obj.result.list.push({ name: "vue" });
+```
+
+### 访问模板引用 / 子组件上的引用
+
+```vue
+// v3.5以前
+<input ref="inputRef" />
+<script>
+import { ref } from "vue";
+const inputRef = ref(null);
+</script>
+
+// v3.5+
+<input ref="my-input" />
+<script>
+import { useTemplateRef } from "vue";
+const myInputRef = useTemplateRef("my-input");
+</script>
+```
+
+### v-for 中模板引用
+
+```vue
+// v3.5以前
+<template>
+  <ul>
+    <li v-for="(item, i) in list" ref="itemRefs"></li>
+  </ul>
+</template>
+<script>
+const itemRefs = ref([]);
+</script>
+
+// v3.5+
+<template>
+  <ul>
+    <li v-for="item in list" ref="items"></li>
+  </ul>
+</template>
+<script>
+import { useTemplateRef } from "vue";
+const itemRefs = useTemplateRef("items");
+</script>
+```
+
 ## 响应式
 
 ref 方法返回一个响应式对象，只包含一个 value 属性  
 ref 解包只发生在被响应式 Object 嵌套，从 Array 或原生集合类型 Map 访问 ref 时，不进行解包
 
 ```js
-import { ref, toRefs, onMounted, watch } from "vue";
+import { ref } from "vue";
 export default {
   props: {
     name: "777",
@@ -413,8 +590,21 @@ export default {
 
 ### key
 
-不使用 key，Vue 会使用一种最大限度减少动态元素并且尽可能的尝试就地修改/复用相同类型元素的算法。  
-而使用 key 时，它会基于 key 的变化重新排列元素顺序，并且会移除 key 不存在的元素。
+使用 key，用于`优化虚拟 DOM 的更新效率` 和 `维护组件或元素的状态`。
+通过 diff 算法，最小化真实 DOM 操作。
+
+不使用 key，元素位置变化时，错误复用 DOM 节点，不必要的 DOM 操作，降低性能
+根据 key 直接追踪元素，避免无效的 DOM 操作
+
+key 的值应该是唯一标识，避免 index
+
+- 优化性能：减少不必要的 DOM 操作，
+- 状态一致性：避免元素或组件的状态错乱
+
+场景：
+
+- 动态组件
+- v-for
 
 #### v-if/v-else-if/v-else
 
@@ -460,7 +650,7 @@ export default {
 
 ### :global
 
-全局选择器：把样式应用到全局，不需要新写一个<style>标签
+全局选择器：把样式应用到全局，不需要新写一个`<style>`标签
 
 ```css
 <style scoped>
@@ -469,3 +659,29 @@ export default {
 }
 </style>
 ```
+
+## 组件通讯
+
+### 父子通讯
+
+- props/$emit
+- ref/$parent/children (直接访问实例)，谨慎使用，破坏封装性，耦合性太高
+
+### 兄弟通讯
+
+- EventBus（事件总线）
+  vue2 是`new Vue()`
+  vue3 是 mitt 第三方库，$on 和$emit
+
+- Vuex/Pinia（状态管理）
+
+### 隔代通讯
+
+- provide/inject (跨层级通讯)
+  祖先组件 provide 提供数据，后代组件 inject 注入
+
+- $attrs/$listeners (透传属性和事件)
+  $attrs 接受未被子组件 props 识别的属性
+  $listeners 获取传递给子组件的自定义事件
+
+###

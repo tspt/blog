@@ -7,6 +7,12 @@ meta:
     content: tool,vite
 ---
 
+## 安装项目
+
+```bash
+npm create vite@latest
+```
+
 ## vite preview
 
 预览本地构建，开启一个静态 Web 服务器

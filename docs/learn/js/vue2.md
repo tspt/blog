@@ -233,7 +233,11 @@ exact 修饰符
 `true-value` 和 `false-value` 指定选中和未选中的值
 
 ```js
-<input type="checkbox" v-model="checked" :true-value="true" :false-value="false">
+<input type="checkbox" v-model="checked" true-value="1" false-value="0">
+<input type="checkbox" v-model="checked" true-value="trueValue" false-value="falseValue">
+
+const trueValue = 1;
+const falseValue = 0;
 ```
 
 选中值为数组
